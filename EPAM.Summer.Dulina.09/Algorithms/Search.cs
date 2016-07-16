@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Algorithms
 {
@@ -68,5 +68,61 @@ namespace Algorithms
             IComparer<T> comparer = new ComparerOnFunction<T>(comparison);
             return BinarySearch(array, value, comparer);
         }
+
+
+        /// <summary>
+        /// Find number of each word in the sourcePath and write the result into
+        /// resultPath file.
+        /// </summary>
+        /// <param name="sourcePath">File to work with to find number of each words.</param>
+        /// <param name="resultPath">File to write list of words and number of each words.</param>    
+        /// <returns>Text file with the result.</returns>
+        /// <exception cref="ArgumentNullException">sourcePath is null or resultPath is null.</exception>
+        /// <exception cref="ArgumentException">sourcePath length is 0 or resultPath length is 0.</exception>
+        public static void SearchNumberOfEachWord(string sourcePath, string resultPath)
+        {
+            if (sourcePath == null)
+            {
+                throw new ArgumentNullException(nameof(sourcePath));
+            }
+            if (sourcePath.Length == 0)
+            {
+                throw new ArgumentException("Cant'be empty", nameof(sourcePath));
+            }
+            if (resultPath == null)
+            {
+                throw new ArgumentNullException(nameof(resultPath));
+            }
+            if (resultPath.Length == 0)
+            {
+                throw new ArgumentException("Cant'be empty", nameof(resultPath));
+            }
+            string lines = File.ReadAllText(sourcePath);
+            //FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read);
+            string[] sourceWords = lines.Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+            //SortedList<string, int> resultSetOfValues = new SortedList<string, int>();
+            //SortedDictionary<string, int> resultSetOfValues = new SortedDictionary<string, int>();
+            Dictionary<string, int> resultSetOfValues = new Dictionary<string, int>();
+
+            //Stopwatch timer = new Stopwatch();
+            //timer.Start();
+            foreach (var word in sourceWords)
+            {
+                int count;
+                resultSetOfValues[word] = resultSetOfValues.TryGetValue(word, out count) ? count + 1 : 1;
+            }
+
+            //timer.Stop();
+            //Console.WriteLine(timer.ElapsedMilliseconds);
+
+            using (StreamWriter writer = new StreamWriter(resultPath, false))
+            {
+                foreach (KeyValuePair<string, int> pair in resultSetOfValues)
+                    writer.WriteLine("{0} : {1}", pair.Key, pair.Value);
+            }
+
+        }
     }
 }
+
