@@ -12,7 +12,7 @@ namespace Algorithms
     /// <typeparam name="T">The type of the objects to compare.</typeparam>
     public sealed class ComparisonAdapter<T> : IComparer<T>
     {
-        private Comparison<T> comparison;
+        private readonly Comparison<T> comparison;
 
         public ComparisonAdapter(Comparison<T> comparison)
         {

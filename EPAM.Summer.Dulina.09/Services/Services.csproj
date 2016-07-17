@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinaryBookListStorage.cs" />
+    <Compile Include="BinaryReaderExtensions.cs" />
     <Compile Include="Book.cs" />
     <Compile Include="BookComparators.cs" />
     <Compile Include="BookListService.cs" />

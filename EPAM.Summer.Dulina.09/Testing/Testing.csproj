@@ -50,11 +50,16 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="BookStorage.bin" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Algorithms\Algorithms.csproj">
       <Project>{61f38c9e-79c4-4499-b9a9-fa8d0ea27560}</Project>
       <Name>Algorithms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Services\Services.csproj">
+      <Project>{5be98da3-db90-4d53-9fb2-62d7f27e3dc2}</Project>
+      <Name>Services</Name>
     </ProjectReference>
     <ProjectReference Include="..\Timers\Timers.csproj">
       <Project>{ef481a68-b380-4958-8a3c-2453994f4601}</Project>

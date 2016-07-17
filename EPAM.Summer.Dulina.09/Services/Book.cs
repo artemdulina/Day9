@@ -4,18 +4,19 @@ namespace Entities
 {
     public sealed class Book : IEquatable<Book>, IComparable<Book>
     {
-        private int _pages;
+        private int pages;
         public string Author { get; }
         public string Title { get; }
         public int Pages
         {
-            get { return _pages; }
+            get { return pages; }
             private set
             {
                 if (value <= 0)
                 {
                     throw new ArgumentException("pages should be greater than 0");
                 }
+                pages = value;
             }
         }
 

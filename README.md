@@ -13,3 +13,55 @@ Deadline. (17.07.2016, 18.00)
 Задание 3. 
 
 Тестовый файл содержит некоторую информацию. Разработать приложение, позволяющее определить частоту встречаемости слов в тексте.
+
+Задание 4.
+
+- Для выполнения основных операций со списком книг (класс Book, день 7), который можно загрузить и, если возникнет необходимость, сохранить в некоторое хранилище (пока двоичный файл) разработать класс BookListService (как сервис для работы с коллекцией книг) с функциональностью 
+
+•	AddBook (добавить книгу, если такой книги нет, в противном случае выбросить исключение);
+
+•	RemoveBook (удалить книгу, если она есть, в противном случае выбросить исключение);
+
+•	FindBookByTag (найти книгу по заданному критерию);
+
+•	SortBooksByTag (отсортировать список книг по заданному критерию).
+
+Для работы с файлами использовать только классы BinaryReader, BinaryWriter.
+
+-	Реализовать возможность логирования сообщений различного уровня. (https://github.com/NLog/NLog/wiki).
+
+- Работу классов продемонстрировать на примере консольного приложения.
+
+Типы в помощь
+
+```c#
+public interface IBookListStorage
+{
+        List<Book> LoadBooks();
+        void SaveBooks(IEnumerable<Book> books);
+} 
+
+public class BookListService
+{
+	…
+public void AddBook(Book book)
+{
+//TODO
+}
+
+public void RemoveBook(…)
+{
+//TODO
+    }
+	…
+}
+
+public class BinaryBookListStorage : IBookListStorage
+{
+//TODO
+
+public BinaryBookListStorage(string fileName) {//TODO }
+
+//TODO
+}
+```
