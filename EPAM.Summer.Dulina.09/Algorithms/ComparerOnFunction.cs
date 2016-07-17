@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace Algorithms
 {
-    public sealed class ComparerOnFunction<T> : IComparer<T>
+    /// <summary>
+    /// Object adapter for Comparison'T'.
+    /// </summary>
+    /// <typeparam name="T">The type of the objects to compare.</typeparam>
+    public sealed class ComparisonAdapter<T> : IComparer<T>
     {
         private Comparison<T> comparison;
 
-        public ComparerOnFunction(Comparison<T> comparison)
+        public ComparisonAdapter(Comparison<T> comparison)
         {
             this.comparison = comparison;
         }

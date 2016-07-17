@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace Algorithms
 {
+    /// <summary>
+    /// Class provides a set of different searches.
+    /// </summary>
     public static class Search
     {
 
@@ -65,7 +68,7 @@ namespace Algorithms
             {
                 comparison = Comparer<T>.Default.Compare;
             }
-            IComparer<T> comparer = new ComparerOnFunction<T>(comparison);
+            IComparer<T> comparer = new ComparisonAdapter<T>(comparison);
             return BinarySearch(array, value, comparer);
         }
 
