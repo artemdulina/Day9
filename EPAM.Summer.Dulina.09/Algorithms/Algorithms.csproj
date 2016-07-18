@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComparerOnFunction.cs" />
+    <Compile Include="ComparisonAdapter.cs" />
     <Compile Include="Search.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

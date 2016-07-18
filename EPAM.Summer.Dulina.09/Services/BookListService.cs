@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Entities;
 using NLog;
+using Algorithms;
 
 namespace Services
 {
@@ -21,11 +22,15 @@ namespace Services
         /// </summary>
         public IBookListStorage Storage
         {
-            get { return storage; }
+            get
+            {
+                return storage;
+            }
             private set
             {
                 if (value == null)
                 {
+                    logger.Fatal(new ArgumentNullException(nameof(value)));
                     throw new ArgumentNullException(nameof(value));
                 }
                 storage = value;
@@ -35,6 +40,7 @@ namespace Services
         public BookListService(IBookListStorage storage)
         {
             Storage = storage;
+            logger.Info("Ctor was created");
         }
 
         /// <summary>
@@ -72,6 +78,7 @@ namespace Services
         {
             if (book == null)
             {
+                logger.Error(new ArgumentNullException(nameof(book)));
                 throw new ArgumentNullException(nameof(book));
             }
 
@@ -92,18 +99,34 @@ namespace Services
         /// <param name="comparer">The System.Collections.IComparer&lt;Book> implementation to use when comparing elements or null 
         /// to use the System.IComparable implementation of each element.
         ///</param>
-        /// <exception cref="ArgumentNullException">Comparer is null.</exception>
-        public void SortAndUpdate(IComparer<Book> comparer)
+        public void SortAndUpdate(IComparer<Book> comparer = null)
         {
             if (comparer == null)
             {
-                throw new ArgumentNullException(nameof(comparer));
+                comparer = Comparer<Book>.Default;
             }
 
             List<Book> books = storage.LoadBooks();
 
             books.Sort(comparer);
             storage.SaveBooks(books);
+        }
+
+        /// <summary>
+        /// Sorts the elements using the specified System.Comparison&lt;Book> and rewrite data.
+        /// </summary>
+        /// <param name="comparison">The System.Comparison&lt;Book> implementation to use when comparing elements or null 
+        /// to use the System.IComparable implementation of each element.
+        ///</param>
+        public void SortAndUpdate(Comparison<Book> comparison)
+        {
+            if (comparison == null)
+            {
+                comparison = Comparer<Book>.Default.Compare;
+            }
+
+            IComparer<Book> comparer = new ComparisonAdapter<Book>(comparison);
+            SortAndUpdate(comparer);
         }
 
         /// <summary>

@@ -68,6 +68,7 @@ namespace Algorithms
             {
                 comparison = Comparer<T>.Default.Compare;
             }
+
             IComparer<T> comparer = new ComparisonAdapter<T>(comparison);
             return BinarySearch(array, value, comparer);
         }

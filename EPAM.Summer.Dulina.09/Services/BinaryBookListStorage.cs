@@ -31,6 +31,7 @@ namespace Services
             {
                 if (string.IsNullOrEmpty(value))
                 {
+                    logger.Fatal(new ArgumentException("Null or empty", nameof(value)));
                     throw new ArgumentException("Null or empty", nameof(value));
                 }
 
@@ -41,6 +42,7 @@ namespace Services
         public BinaryBookListStorage(string fileName)
         {
             FileName = fileName;
+            logger.Debug("Ctor was created");
         }
 
         public List<Book> LoadBooks()
@@ -54,7 +56,7 @@ namespace Services
                 }
             }
 
-            //logger.Info($"{books.Count} books were loaded from the file");
+            logger.Info($"{books.Count} books were loaded from the file");
             return books;
         }
 
@@ -64,6 +66,7 @@ namespace Services
         /// <param name="books"></param>
         public void SaveBooks(IEnumerable<Book> books)
         {
+            int count = 0;
             using (BinaryWriter writer = new BinaryWriter(File.Open(baseDirectoryPath + FileName, FileMode.Create, FileAccess.Write)))
             {
                 foreach (Book book in books)
@@ -72,8 +75,10 @@ namespace Services
                     writer.Write(book.Title);
                     writer.Write(book.Pages);
                     writer.Write(book.Year);
+                    count++;
                 }
             }
+            logger.Info($"{count} books were written to the file");
         }
     }
 }
