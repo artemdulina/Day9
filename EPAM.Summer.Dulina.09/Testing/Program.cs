@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq.Expressions;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Algorithms;
@@ -13,6 +16,7 @@ namespace Testing
     {
         static void Main(string[] args)
         {
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
             int[] array = { 4, 564, 64, 56, 684, 21, 351, 31, 321, -1, 212, 3, 2 };
             int[] arrayB = { 4, 534, 564, 56, 64, 21, 351, 31, 321, -45, 212, 3 };
             Array.Sort(array);
@@ -33,27 +37,29 @@ namespace Testing
             //TimeSpan time2 = new TimeSpan(0, 0, 2);
             //timer2.SimulateTimerLauncher("fastPetr", time2);
 
-            // timer.SimulateTimerLauncher("fastPetr", time2);
-
+            // timer.SimulateTimerLauncher("fastPetr", time2);      
 
             BinaryBookListStorage storage = new BinaryBookListStorage("BookStorage.bin");
             List<Book> books = new List<Book>
             {
-                new Book("artem", "C#", 1456, 2016),
-                new Book("petr", "C++", 1230, 2015),
+                new Book("Artem", "C#", 1456, 2016),
+                new Book("Petr", "C++", 1230, 2015),
                 new Book("Tirion", "Java", 1053, 2014)
             };
             //storage.SaveBooks(books);
 
             List<Book> readResult = storage.LoadBooks();
-            foreach (Book book in readResult)
+            /*foreach (Book book in readResult)
             {
                 Console.WriteLine(book);
-            }
+            }*/
 
             BookListService service = new BookListService(storage);
-            if(service.FindBook(x => x.Pages < 1000) == null)
-                Console.WriteLine("null");           
+            /*if (service.FindBook(x => x.Pages < 1000) == null)
+                Console.WriteLine("null");*/
+
+            service.AddBook(null);
+
         }
     }
 }

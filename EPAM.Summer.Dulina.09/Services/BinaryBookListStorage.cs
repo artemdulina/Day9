@@ -6,24 +6,34 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Entities;
+using NLog;
 
 namespace Services
 {
+    /// <summary>
+    /// Class provides ability to load and save Entities.Book to the binary file.
+    /// </summary>
     public class BinaryBookListStorage : IBookListStorage
     {
+        private Logger logger = LogManager.GetCurrentClassLogger();
+
         private string fileName;
 
         private readonly string baseDirectoryPath = AppDomain.CurrentDomain.BaseDirectory;
 
         public string FileName
         {
-            get { return fileName; }
+            get
+            {
+                return fileName;
+            }
             private set
             {
                 if (string.IsNullOrEmpty(value))
                 {
                     throw new ArgumentException("Null or empty", nameof(value));
                 }
+
                 fileName = value;
             }
         }
@@ -43,9 +53,15 @@ namespace Services
                     books.Add(new Book(reader.ReadString(), reader.ReadString(), reader.ReadInt32(), reader.ReadInt32()));
                 }
             }
+
+            //logger.Info($"{books.Count} books were loaded from the file");
             return books;
         }
 
+        /// <summary>
+        /// Saves books to the specified binary file.
+        /// </summary>
+        /// <param name="books"></param>
         public void SaveBooks(IEnumerable<Book> books)
         {
             using (BinaryWriter writer = new BinaryWriter(File.Open(baseDirectoryPath + FileName, FileMode.Create, FileAccess.Write)))
@@ -58,6 +74,6 @@ namespace Services
                     writer.Write(book.Year);
                 }
             }
-        }     
+        }
     }
 }

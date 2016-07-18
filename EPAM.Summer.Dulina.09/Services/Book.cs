@@ -2,7 +2,7 @@
 
 namespace Entities
 {
-    public sealed class Book : IEquatable<Book>, IComparable<Book>
+    public sealed class Book : IEquatable<Book>, IComparable<Book>, IComparable
     {
         private int pages;
         public string Author { get; }
@@ -39,10 +39,12 @@ namespace Entities
         {
             if (ReferenceEquals(other, null)) return false;
             if (ReferenceEquals(this, other)) return true;
+
             if (Author == other.Author && Title == other.Title)
             {
                 return true;
             }
+
             return false;
         }
 
@@ -52,6 +54,7 @@ namespace Entities
             {
                 throw new ArgumentNullException(nameof(other));
             }
+
             if (Pages > other.Pages)
                 return Pages - other.Pages;
             if (Pages < other.Pages)
@@ -66,8 +69,24 @@ namespace Entities
             {
                 return false;
             }
+
             Book book = (Book)obj;
             return Equals(book);
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null)
+            {
+                return 1;
+            }
+
+            if (obj.GetType() != GetType())
+            {
+                throw new ArgumentException("Argument must be Book");
+            }
+            Book book = (Book)obj;
+            return CompareTo(book);
         }
 
         public override int GetHashCode()
