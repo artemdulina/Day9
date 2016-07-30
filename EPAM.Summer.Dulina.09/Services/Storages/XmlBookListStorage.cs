@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Entities;
 using NLog;
 using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace Services.Storages
 {
@@ -80,8 +83,29 @@ namespace Services.Storages
             {
                 throw new ArgumentNullException(nameof(books));
             }
+            int count = 0;
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Encoding = Encoding.UTF8;
+            settings.Indent = true;
 
-            XmlDocument booksXml = new XmlDocument();
+            XDocument document = new XDocument(new XElement("books"));
+
+            using (XmlWriter writer = XmlWriter.Create(baseDirectoryPath + FileName, settings))
+            {
+                foreach (Book book in books)
+                {
+                    document.Root.Add(
+                  new XElement("book",
+                      new XElement("author", book.Author),
+                      new XElement("title", book.Title),
+                      new XElement("pages", book.Pages),
+                      new XElement("year", book.Year)
+                      )
+                      );
+                }
+                document.Save(writer);
+            }
+            /*XmlDocument booksXml = new XmlDocument();
             XmlDeclaration xmlDeclaration = booksXml.CreateXmlDeclaration("1.0", "UTF-8", null);
             booksXml.AppendChild(xmlDeclaration);
 
@@ -112,7 +136,7 @@ namespace Services.Storages
                 count++;
             }
 
-            booksXml.Save(baseDirectoryPath + FileName);
+            booksXml.Save(baseDirectoryPath + FileName);*/
             logger.Info($"{count} books were written to the file");
         }
     }
