@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Entities;
 using NLog;
+using Services.Extensions;
 
-namespace Services
+namespace Services.Storages
 {
     /// <summary>
     /// Class provides ability to load and save Entities.Book to the binary file.
@@ -45,6 +42,10 @@ namespace Services
             logger.Debug("Ctor was created");
         }
 
+        /// <summary>
+        /// Load books to the specified binary file.
+        /// </summary>
+        /// <param name="books"></param>
         public List<Book> LoadBooks()
         {
             List<Book> books = new List<Book>();
@@ -66,6 +67,11 @@ namespace Services
         /// <param name="books"></param>
         public void SaveBooks(IEnumerable<Book> books)
         {
+            if (books == null)
+            {
+                throw new ArgumentNullException(nameof(books));
+            }
+
             int count = 0;
             using (BinaryWriter writer = new BinaryWriter(File.Open(baseDirectoryPath + FileName, FileMode.Create, FileAccess.Write)))
             {

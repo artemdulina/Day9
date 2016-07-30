@@ -3,7 +3,6 @@ using NUnit.Framework;
 
 namespace AlgorithmsTests
 {
-
     [TestFixture]
     public class SearchTests
     {

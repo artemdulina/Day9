@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Services
+namespace Services.Extensions
 {
     /// <summary>
     /// Provides extensions methods for System.IO.BinaryReader.
