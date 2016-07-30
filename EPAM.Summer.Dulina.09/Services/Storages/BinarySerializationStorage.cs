@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+using System.Threading.Tasks;
 using Entities;
 using NLog;
 using Services.Extensions;
@@ -8,9 +12,9 @@ using Services.Extensions;
 namespace Services.Storages
 {
     /// <summary>
-    /// Class provides ability to load and save Entities.Book to the binary file.
+    /// Class provides ability to load and save Entities.Book to the file using binary serialization.
     /// </summary>
-    public class BinaryBookListStorage : IBookListStorage
+    public class BinarySerializationStorage : IBookListStorage
     {
         private Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -36,7 +40,7 @@ namespace Services.Storages
             }
         }
 
-        public BinaryBookListStorage(string fileName)
+        public BinarySerializationStorage(string fileName)
         {
             FileName = fileName;
             logger.Debug("Ctor was created");
@@ -48,12 +52,11 @@ namespace Services.Storages
         public List<Book> LoadBooks()
         {
             List<Book> books = new List<Book>();
-            using (BinaryReader reader = new BinaryReader(File.Open(baseDirectoryPath + FileName, FileMode.Open, FileAccess.Read)))
+
+            BinaryFormatter formatter = new BinaryFormatter();
+            using (FileStream fileStream = new FileStream(baseDirectoryPath + FileName, FileMode.OpenOrCreate))
             {
-                while (!reader.Eof())
-                {
-                    books.Add(new Book(reader.ReadString(), reader.ReadString(), reader.ReadInt32(), reader.ReadInt32()));
-                }
+                books = (List<Book>)formatter.Deserialize(fileStream);
             }
 
             logger.Info($"{books.Count} books were loaded from the file");
@@ -72,17 +75,13 @@ namespace Services.Storages
             }
 
             int count = 0;
-            using (BinaryWriter writer = new BinaryWriter(File.Open(baseDirectoryPath + FileName, FileMode.Create, FileAccess.Write)))
+            BinaryFormatter formatter = new BinaryFormatter();
+            using (FileStream fileStream = new FileStream(baseDirectoryPath + FileName, FileMode.OpenOrCreate))
             {
-                foreach (Book book in books)
-                {
-                    writer.Write(book.Author);
-                    writer.Write(book.Title);
-                    writer.Write(book.Pages);
-                    writer.Write(book.Year);
-                    count++;
-                }
+                formatter.Serialize(fileStream, books);
+                count += books.Count();
             }
+
             logger.Info($"{count} books were written to the file");
         }
     }

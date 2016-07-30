@@ -36,21 +36,26 @@ namespace Testing
 
             // timer.SimulateTimerLauncher("fastPetr", time2);      
 
-            //BinaryBookListStorage storage = new BinaryBookListStorage("BookStorage.bin");
-            XmlBookListStorage storage = new XmlBookListStorage("Books.xml");
+            BinaryBookListStorage binaryStorage = new BinaryBookListStorage("BookStorage.bin");
+            BinarySerializationStorage binarySerializationStorage = new BinarySerializationStorage("books.dat");
+            XmlBookListStorage xmlStorage = new XmlBookListStorage("Books.xml");
             List<Book> books = new List<Book>
             {
                 new Book("Artem", "C#", 1456, 2016),
                 new Book("Petr", "C++", 1230, 2015),
                 new Book("Tirion", "Java", 1053, 2014)
             };
-            storage.SaveBooks(books);
+            binaryStorage.SaveBooks(books);
+            binarySerializationStorage.SaveBooks(books);
+            xmlStorage.SaveBooks(books);
 
-            List<Book> readResult = storage.LoadBooks();
-            foreach (Book book in readResult)
+            List<Book> readResultB = binaryStorage.LoadBooks();
+            List<Book> readResultS = binarySerializationStorage.LoadBooks();
+            List<Book> readResultXml = xmlStorage.LoadBooks();
+            /*foreach (Book book in readResult)
             {
                 Console.WriteLine(book);
-            }
+            }*/
 
             //BookListService service = new BookListService(storage);
             /*if (service.FindBook(x => x.Pages < 1000) == null)

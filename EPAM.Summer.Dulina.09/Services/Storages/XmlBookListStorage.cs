@@ -44,7 +44,6 @@ namespace Services.Storages
         /// <summary>
         /// Saves books to the specified xml file.
         /// </summary>
-        /// <param name="books"></param>
         public List<Book> LoadBooks()
         {
             List<Book> books = new List<Book>();

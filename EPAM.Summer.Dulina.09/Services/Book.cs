@@ -2,6 +2,7 @@
 
 namespace Entities
 {
+    [Serializable]
     public sealed class Book : IEquatable<Book>, IComparable<Book>, IComparable
     {
         private int pages;
