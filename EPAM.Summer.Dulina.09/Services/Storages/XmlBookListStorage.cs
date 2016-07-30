@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Entities;
 using NLog;
@@ -50,7 +51,14 @@ namespace Services.Storages
         public List<Book> LoadBooks()
         {
             List<Book> books = new List<Book>();
-            XmlDocument booksFromXml = new XmlDocument();
+
+            XDocument xmlXDocument = XDocument.Load(baseDirectoryPath + FileName);
+            var items = from book in xmlXDocument.Element("books").Elements("book")
+                        select new Book(book.Element("author").Value, book.Element("title").Value,
+                            Convert.ToInt32(book.Element("pages").Value), Convert.ToInt32(book.Element("year").Value));
+
+            books = items.ToList();
+            /*XmlDocument booksFromXml = new XmlDocument();
             booksFromXml.Load(baseDirectoryPath + FileName);
             XmlElement rootElement = booksFromXml.DocumentElement;
             foreach (XmlNode node in rootElement)
@@ -67,7 +75,7 @@ namespace Services.Storages
                     if (childnode.Name == "year") year = Convert.ToInt32(childnode.InnerText);
                 }
                 books.Add(new Book(author, title, pages, year));
-            }
+            }*/
 
             logger.Info($"{books.Count} books were loaded from the file");
             return books;
@@ -84,9 +92,11 @@ namespace Services.Storages
                 throw new ArgumentNullException(nameof(books));
             }
             int count = 0;
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Encoding = Encoding.UTF8;
-            settings.Indent = true;
+            XmlWriterSettings settings = new XmlWriterSettings
+            {
+                Encoding = Encoding.UTF8,
+                Indent = true
+            };
 
             XDocument document = new XDocument(new XElement("books"));
 
@@ -102,6 +112,7 @@ namespace Services.Storages
                       new XElement("year", book.Year)
                       )
                       );
+                    count++;
                 }
                 document.Save(writer);
             }

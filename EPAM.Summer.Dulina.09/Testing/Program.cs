@@ -52,10 +52,10 @@ namespace Testing
             List<Book> readResultB = binaryStorage.LoadBooks();
             List<Book> readResultS = binarySerializationStorage.LoadBooks();
             List<Book> readResultXml = xmlStorage.LoadBooks();
-            /*foreach (Book book in readResult)
+            foreach (Book book in readResultXml)
             {
                 Console.WriteLine(book);
-            }*/
+            }
 
             //BookListService service = new BookListService(storage);
             /*if (service.FindBook(x => x.Pages < 1000) == null)
